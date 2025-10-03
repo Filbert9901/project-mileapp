@@ -48,3 +48,11 @@ tasks.createIndex({ title: "text" }); // for text search / partial match
 tasks.createIndex({ title: 1 });      // for exact match or sorting by title
 tasks.createIndex({ createdAt: 1 });  // for filtering and sorting by date
 tasks.createIndex({ status: 1 });     // for filtering and sorting by task status
+
+````
+## Deployment
+
+This project is deployed with **Vercel** (frontend) and **Railway** (mock API backend).
+  - UI : [https://project-mileapp-git-main-filbert9901s-projects.vercel.app/login](https://project-mileapp-git-main-filbert9901s-projects.vercel.app/login)
+  - API : [https://mileapp-test-production.up.railway.app/](https://mileapp-test-production.up.railway.app/)
+
