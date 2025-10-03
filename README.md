@@ -53,6 +53,6 @@ tasks.createIndex({ status: 1 });     // for filtering and sorting by task statu
 ## Deployment
 
 This project is deployed with **Vercel** (frontend) and **Railway** (mock API backend).
-  - UI : [https://project-mileapp-git-main-filbert9901s-projects.vercel.app/login](https://project-mileapp-git-main-filbert9901s-projects.vercel.app/login)
+  - UI : [https://project-mileapp.vercel.app/login](https://project-mileapp.vercel.app/login)
   - API : [https://mileapp-test-production.up.railway.app/](https://mileapp-test-production.up.railway.app/)
 
