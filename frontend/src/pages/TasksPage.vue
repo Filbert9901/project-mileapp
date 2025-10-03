@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../api";
 import debounce from "lodash.debounce";
 
 export default {
@@ -171,20 +171,19 @@ export default {
   methods: {
     async fetchTasks() {
       try {
-        let url = "http://localhost:3001/tasks";
-        const params = [];
+        const params = {};
 
-        if (this.filterStatus) params.push(`status=${this.filterStatus}`);
-        if (this.searchQuery && this.searchQuery.trim() !== "") params.push(`q=${this.searchQuery.trim()}`);
-        if (this.filterDate) params.push(`createdAt=${this.filterDate}`);
+        if (this.filterStatus) params.status = this.filterStatus;
+        if (this.searchQuery && this.searchQuery.trim() !== "") params.q = this.searchQuery.trim();
+        if (this.filterDate) params.createdAt = this.filterDate;
 
-        params.push(`_sort=${this.sortField}`);
-        params.push(`_order=${this.sortOrder}`);
-        params.push(`_page=${this.currentPage}`);
-        params.push(`_limit=${this.pageSize}`);
-        if (params.length) url += "?" + params.join("&");
+        params._sort = this.sortField;
+        params._order = this.sortOrder;
+        params._page = this.currentPage;
+        params._limit = this.pageSize;
 
-        const res = await axios.get(url);
+        const res = await api.get("/tasks", { params });
+
         this.meta.totalCount = parseInt(res.headers["x-total-count"] || 0);
         this.meta.currentPage = this.currentPage;
         this.meta.totalPages = Math.ceil((res.headers["x-total-count"] || 0) / this.pageSize);
@@ -194,9 +193,10 @@ export default {
       }
     },
 
+
     async deleteTask(id) {
       try {
-        await axios.delete(`http://localhost:3001/tasks/${id}`);
+        await api.delete(`/tasks/${id}`);
         this.tasks = this.tasks.filter(task => task.id !== id);
       } catch (err) {
         if (err.response) {
@@ -229,7 +229,7 @@ export default {
 
     async handleCreateTask() {
       try {
-        const res = await axios.post("http://localhost:3001/tasks", this.currentTask);
+        const res = await api.post("/tasks", this.currentTask);
         this.tasks.push(res.data); // update list
         this.closeModal();
       } catch (err) {
@@ -239,10 +239,7 @@ export default {
 
     async handleUpdateTask() {
       try {
-        const res = await axios.put(
-          `http://localhost:3001/tasks/${this.currentTask.id}`,
-          this.currentTask
-        );
+        const res = await api.put(`/tasks/${this.currentTask.id}`, this.currentTask);
         const index = this.tasks.findIndex(t => t.id === this.currentTask.id);
         if (index !== -1) this.tasks[index] = res.data;
         this.closeModal();
@@ -276,7 +273,7 @@ export default {
         }
       }
     },
-    
+
     resetCurrentTask() {
       this.currentTask = {
         title: "",
@@ -285,10 +282,10 @@ export default {
       };
     },
 
-     logout() {
-    localStorage.removeItem("authToken");
-    this.$router.push("/login");
-  }
+    logout() {
+      localStorage.removeItem("authToken");
+      this.$router.push("/login");
+    }
 
   }
 };
